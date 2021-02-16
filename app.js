@@ -2,6 +2,7 @@
 const { Logger } = require("./logging/logger");
 //i Express Modules
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const { errorHandler } = require("./middleware/errorHandler");
 const bodyParser = require("body-parser"); //Body Parser ermöglicht es mit Post Requests umzugehen
@@ -27,6 +28,9 @@ mongoose
 /* ---------------------------------------
 i ---------------MIDDLEWARES--------------
 ------------------------------------------*/
+app.use(cors());
+app.options("*", cors());
+
 app.use(bodyParser.json()); //!!!!!! GANZ OBEN WEIL SONST KEIN REQ.BODY ANKOMMT (2 STUNDEN FEHLERSUCHE!!!!!!!!)
 app.use((req, res, next) => {
   Logger.ipLog(`${req.method}: ${req.ip} | "${req.url}"`);
