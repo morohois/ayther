@@ -31,6 +31,10 @@ router.post(
       return res.status(400).json({
         error: `User with name ${req.body.username} already exists!`,
       });
+    if (await User.exists({ email: req.body.email }))
+      return res.status(400).json({
+        error: `Die Email wird bereits verwendet!`,
+      });
 
     newUser = new User(_.pick(req.body, ["username", "email", "password"]));
 

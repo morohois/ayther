@@ -24,23 +24,20 @@ router.post(
   errorHandler(async (req, res) => {
     req.body = mask(req.body, "username,password");
     const { error } = await validateLogin(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) return res.status(400).json({ error: error.details[0].message });
     const user = await User.findOne({ username: req.body.username });
     if (!user)
       return res.status(400).json({
         error: `Invalid Username or password!`,
       });
 
-    const validPassword = await bcrypt.compare(
-      req.body.password,
-      user.password
-    );
+    const validPassword = await bcrypt.compare(req.body.password, user.password);
     if (!validPassword)
       return res.status(400).json({
         error: `Invalid Username or password!`,
       });
     const token = user.generateAuthToken();
-    res.send(token);
+    res.status(200).json({ jwt: token, id: user._id });
   })
 );
 module.exports = router;

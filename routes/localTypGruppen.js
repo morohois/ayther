@@ -60,11 +60,18 @@ router.get(
   errorHandler(async (req, res) => {
     const userLat = req.query.lat;
     const userLon = req.query.lon;
-    if (!userLat || !userLon) return res.send("Latitude und Longitude müssen in die Query!");
+    const typ = req.query.typ;
+    if (!userLat || !userLon || !typ)
+      return res.send("Latitude und Longitude müssen in die Query, sowie der der Typ der Gruppe!");
     if (userLat < -90 || userLat > 90 || userLon < -180 || userLon > 180)
       return res.send("Die Koordinaten sind falsch!");
 
-    const LocalTypGruppen = await LocalTypGruppe.find();
+    const typgruppe = await TypGruppe.findOne({ name: typ });
+
+    if (!typgruppe) return res.json({ error: "Der angegebene Typ existiert nicht!" });
+
+    const LocalTypGruppen = await LocalTypGruppe.find({ typgruppenID: typgruppe._id });
+    console.log(LocalTypGruppen);
     let selectGruppen = [];
 
     LocalTypGruppen.forEach((local) => {
@@ -82,11 +89,17 @@ router.get(
   errorHandler(async (req, res) => {
     const userLat = req.query.lat;
     const userLon = req.query.lon;
-    if (!userLat || !userLon) return res.send("Latitude und Longitude müssen in die Query!");
+    const typ = req.query.typ;
+    if (!userLat || !userLon || !typ)
+      return res.json({ error: "Latitude und Longitude müssen in die Query, sowie der der Typ der Gruppe!" });
     if (userLat < -90 || userLat > 90 || userLon < -180 || userLon > 180)
-      return res.send("Die Koordinaten sind falsch!");
+      return res.json({ error: "Die Koordinaten sind falsch!" });
 
-    const LocalTypGruppen = await LocalTypGruppe.find();
+    const typgruppe = await TypGruppe.findOne({ name: typ });
+
+    if (!typgruppe) return res.json({ error: "Der angegebene Typ existiert nicht!" });
+
+    const LocalTypGruppen = await LocalTypGruppe.find({ typgruppenID: typgruppe._id });
     let selectGruppen = [];
 
     LocalTypGruppen.forEach((local) => {
