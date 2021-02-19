@@ -152,12 +152,16 @@ router.get(
 
     const angemeldeteVeranstaltungen = await Veranstaltung.find({ teilnehmer: req.params.uid });
 
+    //i Alle Veranstaltungen für die der Benutzer schon angemeldet ist egal ob er der Gruppe aktuell angehört
+    //i Sollen ebenfalls übertragen werden
     let veranstaltungen = angemeldeteVeranstaltungen;
 
+    //i Alles was zu den Lokalen Typ Gruppen gefunden werden kann an Veranstaltungen mit in den Container rein
     for (a = 0; a < locals.length; a++) {
       for (i = 0; i < locals[a].veranstaltungen.length; i++) {
         let veranstaltungTemp = await Veranstaltung.findById(locals[a].veranstaltungen[i]);
         if (veranstaltungTemp) {
+          //i Prüfen ob die Veranstaltung bereits im Container enthalten ist. (Durch die Übertragung der Angemeldeten Veranstaltungen)
           if (
             veranstaltungen.findIndex((e) => {
               return String(e._id) == String(veranstaltungTemp._id);
@@ -167,7 +171,6 @@ router.get(
         }
       }
     }
-
     if (veranstaltungen.length == 0)
       return res.status(400).json({ error: "Scheinbar existieren noch keine Veranstaltungen für dich!" });
     res.json(veranstaltungen);
@@ -203,15 +206,15 @@ router.post(
   })
 );
 
-//++ Veranstaltungen automatisch generieren für jede LokaleTypGruppe eine
+//++ Veranstaltungen automatisch generieren für jede LokaleTypGruppe - Manuell ausgelöst ( Normalerweise alle 24 Stunden )
 router.post(
   "/generate",
   errorHandler(async (req, res) => {
     //----------------------------------
 
-    await generate();
+    await generate(); //! siehe function/Generate
 
-    res.send("testing");
+    res.send("Generating...");
     //----------------------------------
   })
 );
