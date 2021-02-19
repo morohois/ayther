@@ -3,9 +3,10 @@
 //----------------------------------
 
 const mongoose = require("mongoose");
-const Joi = require("joi");
+const Joi = require("joi"); //i Joi dient der Validierung von Eingaben
 const { string } = require("joi");
 
+//++ Mongoose Schema festlegen
 const fragenSchema = new mongoose.Schema({
   frage: {
     type: String,
@@ -68,8 +69,9 @@ const fragenSchema = new mongoose.Schema({
   },
 });
 
+//++ Joi Validiert die Benutzereingaben, ob alle Anforderungen erfüllt sind.
+//++ Zur vermeidung von Redundantem Code. Das Schema sollte selbsterklärend sein
 async function validateFrage(frage) {
-  console.log(frage);
   const schema = Joi.object({
     frage: Joi.string().min(3).max(5000).required(),
     onTrue: Joi.object({
@@ -86,7 +88,7 @@ async function validateFrage(frage) {
     }).required(),
   });
 
-  const validation = schema.validate(frage);
+  const validation = schema.validate(frage); //i Prüfen ob die Anfrage dem Schema entspricht
   return validation;
 }
 

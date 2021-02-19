@@ -7,6 +7,7 @@ const app = express();
 const { errorHandler } = require("./middleware/errorHandler");
 const bodyParser = require("body-parser"); //Body Parser ermöglicht es mit Post Requests umzugehen
 const generate = require("./functions/generate");
+const clean = require("./functions/clean");
 
 require("./startup/prod")(app);
 
@@ -54,7 +55,9 @@ i --------------Daily Routine-------------
 ------------------------------------------*/
 setInterval(() => {
   generate();
+  clean();
 }, 86400000);
+clean();
 /* ---------------------------------------
 i ----------Starting the Service----------
 ------------------------------------------*/

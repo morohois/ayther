@@ -3,11 +3,12 @@
 //----------------------------------
 
 const mongoose = require("mongoose");
-const Joi = require("joi");
-Joi.objectId = require("joi-objectid")(Joi);
+const Joi = require("joi"); //i Joi dient der Validierung von Eingaben
+Joi.objectId = require("joi-objectid")(Joi); //i Joi Object dient der Validierung von ObjektIDs
 const jwt = require("jsonwebtoken");
 const { string, number, required } = require("joi");
 
+//++ Mongoose Schema festlegen
 const localTypgruppenSchema = new mongoose.Schema({
   region: {
     name: {
@@ -45,6 +46,8 @@ const localTypgruppenSchema = new mongoose.Schema({
   },
 });
 
+//++ Joi Validiert die Benutzereingaben, ob alle Anforderungen erfüllt sind.
+//++ Zur vermeidung von Redundantem Code. Das Schema sollte selbsterklärend sein
 async function validateLocalTypgruppe(typgruppe) {
   const schema = Joi.object({
     region: Joi.object({
@@ -54,7 +57,7 @@ async function validateLocalTypgruppe(typgruppe) {
     }).required(),
     typ: Joi.string().valid("Feuer", "Wasser", "Erde", "Luft"),
   });
-  const validation = schema.validate(typgruppe);
+  const validation = schema.validate(typgruppe); //i Prüfen ob die Anfrage dem Schema entspricht
   return validation;
 }
 

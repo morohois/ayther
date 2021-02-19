@@ -3,10 +3,11 @@
 //----------------------------------
 
 const mongoose = require("mongoose");
-const Joi = require("joi");
+const Joi = require("joi"); //i Joi dient der Validierung von Eingaben
 const jwt = require("jsonwebtoken");
 const { string } = require("joi");
 
+//++ Mongoose Schema festlegen
 const typgruppenSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -21,13 +22,15 @@ const typgruppenSchema = new mongoose.Schema({
   },
 });
 
+//++ Joi Validiert die Benutzereingaben, ob alle Anforderungen erfüllt sind.
+//++ Zur vermeidung von Redundantem Code. Das Schema sollte selbsterklärend sein
 async function validateTypgruppe(typgruppe) {
   const schema = Joi.object({
     name: Joi.string().min(3).max(255).required(),
     refUser: Joi.string().min(3).max(255).required(),
   });
 
-  const validation = schema.validate(typgruppe);
+  const validation = schema.validate(typgruppe); //i Prüfen ob die Anfrage dem Schema entspricht
   return validation;
 }
 

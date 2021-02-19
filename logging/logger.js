@@ -1,4 +1,6 @@
-const chalk = require("chalk");
+//++ Der Logger dient dazu durch Farben Ausschlusreichere Logs in der Konsole abzulegen
+
+const chalk = require("chalk"); //i Chalk dient zum einfärben der Konsolen Logs
 
 class Logger {
   error(message) {
@@ -18,4 +20,4 @@ class Logger {
   }
 }
 
-exports.Logger = new Logger();
+exports.Logger = new Logger(); //i Soll direkt verwendet werden Können daher ein Objekt der Klasse
